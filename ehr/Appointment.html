@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Appointments - EHR System</title>
+    <link rel="stylesheet" href="Appointment.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="https://helloindia.co/companyimages/1034591/1.png" alt="EHR Logo" class="logo">
+            <h1>Doctor Appointments</h1>
+            <nav>
+                <ul>
+                    <li><a href="Docdashboard.html">Dashboard</a></li>
+                    <li><a href="DocPatientSection.html">Patients</a></li>
+                    <li><a href="reports.html">Reports</a></li>
+                    <li><a href="landing.html">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="appointments-container">
+        <h2>Upcoming Appointments</h2>
+        <div class="appointments-list">
+            <div class="appointment-card">
+                <h3>Appointment with Patient A</h3>
+                <p><strong>Date:</strong> 2024-10-25</p>
+                <p><strong>Time:</strong> 10:00 AM</p>
+                <p><strong>Status:</strong> Confirmed</p>
+                <button class="cancel-button">Cancel Appointment</button>
+            </div>
+
+            <div class="appointment-card">
+                <h3>Appointment with Patient B</h3>
+                <p><strong>Date:</strong> 2024-10-26</p>
+                <p><strong>Time:</strong> 11:30 AM</p>
+                <p><strong>Status:</strong> Pending</p>
+                <button class="cancel-button">Cancel Appointment</button>
+            </div>
+
+            <!-- Additional appointments can be added here -->
+        </div>
+
+        <div class="schedule-appointment">
+            <h3>Schedule New Appointment</h3>
+            <form id="scheduleAppointmentForm">
+                <label for="patient">Select Patient:</label>
+                <input type="text" id="patient" placeholder="Patient Name" required>
+
+                <label for="date">Appointment Date:</label>
+                <input type="date" id="date" required>
+
+                <label for="time">Appointment Time:</label>
+                <input type="time" id="time" required>
+
+                <label for="notes">Additional Notes:</label>
+                <textarea id="notes" rows="3" placeholder="Any additional notes..."></textarea>
+
+                <button type="submit">Schedule Appointment</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 EHR System. All rights reserved.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

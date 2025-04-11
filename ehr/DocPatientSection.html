@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patients - EHR System</title>
+    <link rel="stylesheet" href="DocPatientSection.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <img src="https://helloindia.co/companyimages/1034591/1.png" alt="EHR Logo" class="logo">
+            <h1>Patients</h1>
+            <nav>
+                <ul>
+                    <li><a href="Docdashboard.html">Dashboard</a></li>
+                    <li><a href="Appointment.html">Appointments</a></li>
+                    <li><a href="reports.html">Reports</a></li>
+                    <li><a href="landing.html">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="patients-container">
+        <h2>Patient List</h2>
+        <div class="patients-list">
+            <div class="patient-card">
+                <h3>Patient A</h3>
+                <p><strong>ID:</strong> 001</p>
+                <p><strong>Age:</strong> 45</p>
+                <p><strong>Condition:</strong> Hypertension</p>
+                <button class="view-button">View Details</button>
+            </div>
+
+            <div class="patient-card">
+                <h3>Patient B</h3>
+                <p><strong>ID:</strong> 002</p>
+                <p><strong>Age:</strong> 30</p>
+                <p><strong>Condition:</strong> Diabetes</p>
+                <button class="view-button">View Details</button>
+            </div>
+
+            <!-- Additional patient cards can be added here -->
+        </div>
+
+        <div class="add-patient">
+            <h3>Add New Patient</h3>
+            <form id="addPatientForm">
+                <label for="patientName">Patient Name:</label>
+                <input type="text" id="patientName" required>
+
+                <label for="patientAge">Age:</label>
+                <input type="number" id="patientAge" required>
+
+                <label for="condition">Condition:</label>
+                <input type="text" id="condition" required>
+
+                <button type="submit">Add Patient</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 EHR System. All rights reserved.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
