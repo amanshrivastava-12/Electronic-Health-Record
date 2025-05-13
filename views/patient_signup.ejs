@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Signup - EHR System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c5a40;
+            --secondary-color: #4caf50;
+            --accent-color: #8bc34a;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --text-color: #333;
+            --light-color: #f9f9f9;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e0f2e1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            display: flex;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .right-panel {
+            flex: 1.5;
+            padding: 40px;
+        }
+        
+        .left-panel h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .left-panel p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .benefits {
+            list-style: none;
+        }
+        
+        .benefits li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .benefits li i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+            transition: var(--transition);
+        }
+        
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: var(--success-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 15px;
+            color: var(--text-color);
+        }
+        
+        .login-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .login-link a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        .password-strength {
+            height: 5px;
+            margin-top: 8px;
+            border-radius: 3px;
+            background-color: #eee;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+        
+        .strength-weak {
+            background-color: var(--error-color);
+            width: 33%;
+        }
+        
+        .strength-medium {
+            background-color: #f39c12;
+            width: 66%;
+        }
+        
+        .strength-strong {
+            background-color: var(--success-color);
+            width: 100%;
+        }
+        
+        .strength-text {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #777;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        
+        .checkbox-container label {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .info-tooltip {
+            display: inline-block;
+            position: relative;
+            margin-left: 5px;
+            color: #777;
+            cursor: help;
+        }
+        
+        .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        
+        .info-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .step-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-number.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .step-title {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+        }
+        
+        .step-title.active {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        
+        .step-divider {
+            flex: 1;
+            height: 2px;
+            background-color: #eee;
+            position: relative;
+            top: 14px;
+            margin: 0 5px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                padding: 30px 20px;
+            }
+            
+            .right-panel {
+                padding: 30px 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .progress-steps {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 5px;
+            }
+            
+            .step {
+                min-width: 80px;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h1>Welcome to Your Health Portal</h1>
+            <p>Create your patient account to manage your health records, appointments, and communicate with your healthcare providers.</p>
+            <ul class="benefits">
+                <li><i class="fas fa-calendar-alt"></i> Schedule appointments online</li>
+                <li><i class="fas fa-file-medical"></i> Access your medical records</li>
+                <li><i class="fas fa-pills"></i> View medication history</li>
+                <li><i class="fas fa-comment-medical"></i> Message your healthcare providers</li>
+                <li><i class="fas fa-mobile-alt"></i> Get appointment reminders</li>
+            </ul>
+        </div>
+        <div class="right-panel">
+            <div class="progress-steps">
+                <div class="step">
+                    <div class="step-number active">1</div>
+                    <div class="step-title active">Account</div>
+                </div>
+                <div class="step-divider"></div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Personal Info</div>
+                </div>
+                <div class="step-divider"></div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Medical History</div>
+                </div>
+            </div>
+            
+            <h2>Create Patient Account</h2>
+            <form id="patientSignupForm" action="/patient/signup" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name*</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name*</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                        <div class="error-message" id="lastNameError"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address*</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number*</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(123) 456-7890" required>
+                        <div class="error-message" id="phoneError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth*</label>
+                        <input type="date" id="dob" name="dob" required>
+                        <div class="error-message" id="dobError"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password*</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required>
+                        <i class="toggle-password fas fa-eye" onclick="togglePasswordVisibility('password')"></i>
+                    </div>
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="strength-text" id="passwordStrengthText">Password strength</div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password*</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <i class="toggle-password fas fa-eye" onclick="togglePasswordVisibility('confirmPassword')"></i>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="termsConditions" name="termsConditions" required>
+                    <label for="termsConditions">I agree to the <a href="/terms">Terms and Conditions</a> and <a href="/privacy">Privacy Policy</a></label>
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="healthDataConsent" name="healthDataConsent" required>
+                    <label for="healthDataConsent">
+                        I consent to the storage and processing of my health data 
+                        <span class="info-tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltip-text">Your health data is stored securely and only accessible to your authorized healthcare providers.</span>
+                        </span>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn" id="registerBtn">Continue to Next Step</button>
+                
+                <div class="success-message" id="registrationSuccess">Account created! Proceeding to next step...</div>
+            </form>
+            <div class="login-link">
+                Already have an account? <a href="/patient/login">Log in</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+        
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+        
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 1;
+            if (password.match(/[A-Z]/)) strength += 1;
+            if (password.match(/[0-9]/)) strength += 1;
+            if (password.match(/[^A-Za-z0-9]/)) strength += 1;
+            
+            strengthBar.className = "password-strength-bar";
+            
+            if (password.length === 0) {
+                strengthBar.style.width = "0";
+                strengthText.textContent = "Password strength";
+            } else if (strength <= 2) {
+                strengthBar.classList.add("strength-weak");
+                strengthText.textContent = "Weak password";
+                strengthText.style.color = "#e74c3c";
+            } else if (strength === 3) {
+                strengthBar.classList.add("strength-medium");
+                strengthText.textContent = "Medium strength password";
+                strengthText.style.color = "#f39c12";
+            } else {
+                strengthBar.classList.add("strength-strong");
+                strengthText.textContent = "Strong password";
+                strengthText.style.color = "#2ecc71";
+            }
+        });
+        
+        // Phone number formatting
+        const phoneInput = document.getElementById('phone');
+        phoneInput.addEventListener('input', function(e) {
+            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+        });
+        
+        // Form validation
+        const patientSignupForm = document.getElementById('patientSignupForm');
+        
+        patientSignupForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Reset error messages
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.style.display = 'none');
+            
+            let isValid = true;
+            
+            // Validate first name
+            const firstName = document.getElementById('firstName');
+            if (firstName.value.trim() === '') {
+                showError('firstNameError', 'First name is required');
+                isValid = false;
+            }
+            
+            // Validate last name
+            const lastName = document.getElementById('lastName');
+            if (lastName.value.trim() === '') {
+                showError('lastNameError', 'Last name is required');
+                isValid = false;
+            }
+            
+            // Validate email
+            const email = document.getElementById('email');
+            if (email.value.trim() === '') {
+                showError('emailError', 'Email is required');
+                isValid = false;
+            } else if (!isValidEmail(email.value)) {
+                showError('emailError', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Validate phone
+            const phone = document.getElementById('phone');
+            if (phone.value.trim() === '') {
+                showError('phoneError', 'Phone number is required');
+                isValid = false;
+            } else if (!isValidPhone(phone.value)) {
+                showError('phoneError', 'Please enter a valid phone number');
+                isValid = false;
+            }
+            
+            // Validate date of birth
+            const dob = document.getElementById('dob');
+            if (dob.value === '') {
+                showError('dobError', 'Date of birth is required');
+                isValid = false;
+            } else {
+                const dobDate = new Date(dob.value);
+                const today = new Date();
+                if (dobDate > today) {
+                    showError('dobError', 'Date of birth cannot be in the future');
+                    isValid = false;
+                }
+            }
+            
+            // Validate password
+            const password = document.getElementById('password');
+            if (password.value.length < 8) {
+                showError('passwordError', 'Password must be at least 8 characters long');
+                isValid = false;
+            }
+            
+            // Validate confirm password
+            const confirmPassword = document.getElementById('confirmPassword');
+            if (confirmPassword.value !== password.value) {
+                showError('confirmPasswordError', 'Passwords do not match');
+                isValid = false;
+            }
+            
+            // If form is valid, show success message and submit
+            if (isValid) {
+                const successMessage = document.getElementById('registrationSuccess');
+                successMessage.style.display = 'block';
+                
+                // Simulate form submission and redirection
+                setTimeout(() => {
+                    // Here you would normally submit the form
+                    // For demo purposes, redirect to the next page
+                    window.location.href = "/patient/signup/personal-info";
+                }, 1500);
+            }
+        });
+        
+        function showError(errorId, message) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        function isValidPhone(phone) {
+            // Basic US phone validation - should have 10 digits
+            return phone.replace(/\D/g, '').length === 10;
+        }
+    </script>
+</body>
+</html>

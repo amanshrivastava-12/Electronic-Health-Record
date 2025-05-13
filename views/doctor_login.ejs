@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Login - EHR System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c5a40;
+            --secondary-color: #4caf50;
+            --accent-color: #8bc34a;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --text-color: #333;
+            --light-color: #f9f9f9;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e0f2e1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            display: flex;
+        }
+        
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .right-panel {
+            flex: 1.5;
+            padding: 40px;
+        }
+        
+        .left-panel h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .left-panel p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .benefits {
+            list-style: none;
+        }
+        
+        .benefits li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .benefits li i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+            transition: var(--transition);
+        }
+        
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: var(--success-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 15px;
+            color: var(--text-color);
+        }
+        
+        .signup-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .signup-link a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        .forgot-password {
+            text-align: right;
+            margin-top: 5px;
+        }
+        
+        .forgot-password a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .forgot-password a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        /* Divider with text */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: #777;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background-color: #ddd;
+        }
+        
+        .divider span {
+            padding: 0 10px;
+            font-size: 14px;
+        }
+        
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 180px;
+            height: 45px;
+            border-radius: var(--border-radius);
+            border: 1px solid #ddd;
+            background-color: white;
+            color: #555;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            gap: 10px;
+            padding: 0 15px;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+        
+        .social-btn.google {
+            border-color: #f2f2f2;
+            color: #757575;
+        }
+        
+        .social-btn.google:hover {
+            background-color: #f2f2f2;
+        }
+        
+        .social-btn.facebook {
+            background-color: #4267B2;
+            border-color: #4267B2;
+            color: white;
+        }
+        
+        .social-btn.facebook:hover {
+            background-color: #365899;
+            border-color: #365899;
+        }
+        
+        .social-btn.apple {
+            background-color: #000;
+            border-color: #000;
+            color: white;
+        }
+        
+        .social-btn.apple:hover {
+            background-color: #333;
+            border-color: #333;
+        }
+        
+        .logo-img {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                padding: 30px 20px;
+            }
+            
+            .right-panel {
+                padding: 30px 20px;
+            }
+            
+            .social-login {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-btn {
+                width: 100%;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h1>Welcome Back!</h1>
+            <p>Access your personal health records, schedule appointments, and manage your healthcare journey with our secure patient portal.</p>
+            <ul class="benefits">
+                <li><i class="fas fa-check-circle"></i> View your complete medical history</li>
+                <li><i class="fas fa-check-circle"></i> Schedule and manage appointments</li>
+                <li><i class="fas fa-check-circle"></i> Request prescription refills</li>
+                <li><i class="fas fa-check-circle"></i> Secure messaging with your doctors</li>
+                <li><i class="fas fa-check-circle"></i> Access lab results and reports</li>
+            </ul>
+        </div>
+        <div class="right-panel">
+            <h2>Patient Login</h2>
+            <form id="patientLoginForm" action="/patient/login" method="POST">
+                <div class="form-group">
+                    <label for="email">Email Address*</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password*</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required>
+                        <i class="toggle-password fas fa-eye" onclick="togglePasswordVisibility('password')"></i>
+                    </div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="/forgot-password">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+                
+                <div class="success-message" id="loginSuccess">Login successful! Redirecting...</div>
+            </form>
+            
+            <div class="divider">
+                <span>Or login with</span>
+            </div>
+            
+            <div class="social-login">
+                <button class="social-btn google">
+                    <svg class="logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                        <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                        <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                        <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+                <button class="social-btn facebook">
+                    <svg class="logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <path fill="white" d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z"/>
+                        <path fill="#1877F2" d="M24,4C12.954,4,4,12.954,4,24s8.954,20,20,20s20-8.954,20-20S35.046,4,24,4z M26,20v-2c0-1.103,0.897-2,2-2h2v4h-2v8h-4v-8h-2v-4h2c0,0,0-2.005,0-3c0-2.771,2.229-5,5-5h3v4h-3c-0.552,0-1,0.448-1,1v3H32z"/>
+                    </svg>
+                    Continue with Facebook
+                </button>
+                <button class="social-btn apple">
+                    <svg class="logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                        <path fill="white" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                    </svg>
+                    Continue with Apple
+                </button>
+            </div>
+            
+            <div class="signup-link">
+                Don't have an account? <a href="/patient_signup">Register Now</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+        
+        // Form validation
+        const patientLoginForm = document.getElementById('patientLoginForm');
+        
+        patientLoginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Reset error messages
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.style.display = 'none');
+            
+            let isValid = true;
+            
+            // Validate email
+            const email = document.getElementById('email');
+            if (email.value.trim() === '') {
+                showError('emailError', 'Email is required');
+                isValid = false;
+            } else if (!isValidEmail(email.value)) {
+                showError('emailError', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Validate password
+            const password = document.getElementById('password');
+            if (password.value.trim() === '') {
+                showError('passwordError', 'Password is required');
+                isValid = false;
+            }
+            
+            // Check for URL parameters for error messages
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorParam = urlParams.get('error');
+            if (errorParam === 'invalid') {
+                showError('passwordError', 'Invalid email or password');
+                isValid = false;
+            }
+            
+            // If form is valid, show success message and submit
+            if (isValid) {
+                const successMessage = document.getElementById('loginSuccess');
+                successMessage.style.display = 'block';
+                
+                // Simulate form submission and redirection
+                setTimeout(() => {
+                    document.getElementById('patientLoginForm').submit();
+                }, 1500);
+            }
+        });
+        
+        function showError(errorId, message) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+        
+        // Add input field animations
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-5px)';
+                this.style.borderColor = 'var(--secondary-color)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+                if (!this.value) {
+                    this.style.borderColor = '#ddd';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

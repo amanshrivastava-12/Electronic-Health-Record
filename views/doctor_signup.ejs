@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Signup - EHR System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c5a40;
+            --secondary-color: #4caf50;
+            --accent-color: #8bc34a;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --text-color: #333;
+            --light-color: #f9f9f9;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e0f2e1 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            display: flex;
+        }
+        
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .right-panel {
+            flex: 1.5;
+            padding: 40px;
+        }
+        
+        .left-panel h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        
+        .left-panel p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .benefits {
+            list-style: none;
+        }
+        
+        .benefits li {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .benefits li i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+            transition: var(--transition);
+        }
+        
+        .toggle-password:hover {
+            color: var(--primary-color);
+        }
+        
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success-message {
+            color: var(--success-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 15px;
+            color: var(--text-color);
+        }
+        
+        .login-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .login-link a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        .password-strength {
+            height: 5px;
+            margin-top: 8px;
+            border-radius: 3px;
+            background-color: #eee;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+        
+        .strength-weak {
+            background-color: var(--error-color);
+            width: 33%;
+        }
+        
+        .strength-medium {
+            background-color: #f39c12;
+            width: 66%;
+        }
+        
+        .strength-strong {
+            background-color: var(--success-color);
+            width: 100%;
+        }
+        
+        .strength-text {
+            font-size: 12px;
+            margin-top: 5px;
+            color: #777;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .left-panel {
+                padding: 30px 20px;
+            }
+            
+            .right-panel {
+                padding: 30px 20px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Custom Checkbox Styling */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <h1>Join Our Healthcare Network</h1>
+            <p>Create your doctor account to access our comprehensive Electronic Health Record system and provide better care for your patients.</p>
+            <ul class="benefits">
+                <li><i class="fas fa-check-circle"></i> Secure access to patient records</li>
+                <li><i class="fas fa-check-circle"></i> Schedule appointments efficiently</li>
+                <li><i class="fas fa-check-circle"></i> Write digital prescriptions</li>
+                <li><i class="fas fa-check-circle"></i> Monitor patient health metrics</li>
+                <li><i class="fas fa-check-circle"></i> Collaborate with other healthcare providers</li>
+            </ul>
+        </div>
+        <div class="right-panel">
+            <h2>Doctor Registration</h2>
+            <form id="doctorSignupForm" action="/doctor/signup" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name*</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name*</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                        <div class="error-message" id="lastNameError"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address*</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="specialization">Specialization*</label>
+                        <select id="specialization" name="specialization" required>
+                            <option value="">Select Specialization</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Dermatology">Dermatology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Psychiatry">Psychiatry</option>
+                            <option value="Oncology">Oncology</option>
+                            <option value="General Practice">General Practice</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="error-message" id="specializationError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="licenseNumber">Medical License Number*</label>
+                        <input type="text" id="licenseNumber" name="licenseNumber" required>
+                        <div class="error-message" id="licenseNumberError"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dob">Date of Birth*</label>
+                    <input type="date" id="dob" name="dob" required>
+                    <div class="error-message" id="dobError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password*</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" required>
+                        <i class="toggle-password fas fa-eye" onclick="togglePasswordVisibility('password')"></i>
+                    </div>
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="strength-text" id="passwordStrengthText">Password strength</div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password*</label>
+                    <div class="password-container">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <i class="toggle-password fas fa-eye" onclick="togglePasswordVisibility('confirmPassword')"></i>
+                    </div>
+                    <div class="error-message" id="confirmPasswordError"></div>
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="termsConditions" name="termsConditions" required>
+                    <label for="termsConditions">I agree to the Terms and Conditions and Privacy Policy</label>
+                </div>
+                
+                <button type="submit" class="btn" id="registerBtn">Create Account</button>
+                
+                <div class="success-message" id="registrationSuccess">Registration successful! Redirecting...</div>
+            </form>
+            <div class="login-link">
+                Already have an account? <a href="/doctor/login">Log in</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        function togglePasswordVisibility(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.nextElementSibling;
+            
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+        }
+        
+        // Password strength checker
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+        
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 1;
+            if (password.match(/[A-Z]/)) strength += 1;
+            if (password.match(/[0-9]/)) strength += 1;
+            if (password.match(/[^A-Za-z0-9]/)) strength += 1;
+            
+            strengthBar.className = "password-strength-bar";
+            
+            if (password.length === 0) {
+                strengthBar.style.width = "0";
+                strengthText.textContent = "Password strength";
+            } else if (strength <= 2) {
+                strengthBar.classList.add("strength-weak");
+                strengthText.textContent = "Weak password";
+                strengthText.style.color = "#e74c3c";
+            } else if (strength === 3) {
+                strengthBar.classList.add("strength-medium");
+                strengthText.textContent = "Medium strength password";
+                strengthText.style.color = "#f39c12";
+            } else {
+                strengthBar.classList.add("strength-strong");
+                strengthText.textContent = "Strong password";
+                strengthText.style.color = "#2ecc71";
+            }
+        });
+        
+        // Form validation
+        const doctorSignupForm = document.getElementById('doctorSignupForm');
+        
+        doctorSignupForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            // Reset error messages
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.style.display = 'none');
+            
+            let isValid = true;
+            
+            // Validate first name
+            const firstName = document.getElementById('firstName');
+            if (firstName.value.trim() === '') {
+                showError('firstNameError', 'First name is required');
+                isValid = false;
+            }
+            
+            // Validate last name
+            const lastName = document.getElementById('lastName');
+            if (lastName.value.trim() === '') {
+                showError('lastNameError', 'Last name is required');
+                isValid = false;
+            }
+            
+            // Validate email
+            const email = document.getElementById('email');
+            if (email.value.trim() === '') {
+                showError('emailError', 'Email is required');
+                isValid = false;
+            } else if (!isValidEmail(email.value)) {
+                showError('emailError', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Validate specialization
+            const specialization = document.getElementById('specialization');
+            if (specialization.value === '') {
+                showError('specializationError', 'Please select a specialization');
+                isValid = false;
+            }
+            
+            // Validate license number
+            const licenseNumber = document.getElementById('licenseNumber');
+            if (licenseNumber.value.trim() === '') {
+                showError('licenseNumberError', 'License number is required');
+                isValid = false;
+            }
+            
+            // Validate date of birth
+            const dob = document.getElementById('dob');
+            if (dob.value === '') {
+                showError('dobError', 'Date of birth is required');
+                isValid = false;
+            } else {
+                const dobDate = new Date(dob.value);
+                const today = new Date();
+                const age = today.getFullYear() - dobDate.getFullYear();
+                if (age < 18) {
+                    showError('dobError', 'You must be at least 18 years old');
+                    isValid = false;
+                }
+            }
+            
+            // Validate password
+            const password = document.getElementById('password');
+            if (password.value.length < 8) {
+                showError('passwordError', 'Password must be at least 8 characters long');
+                isValid = false;
+            }
+            
+            // Validate confirm password
+            const confirmPassword = document.getElementById('confirmPassword');
+            if (confirmPassword.value !== password.value) {
+                showError('confirmPasswordError', 'Passwords do not match');
+                isValid = false;
+            }
+            
+            // If form is valid, show success message and submit
+            if (isValid) {
+                const successMessage = document.getElementById('registrationSuccess');
+                successMessage.style.display = 'block';
+                
+                // Simulate form submission and redirection
+                setTimeout(() => {
+                    document.getElementById('doctorSignupForm').submit();
+                }, 1500);
+            }
+        });
+        
+        function showError(errorId, message) {
+            const errorElement = document.getElementById(errorId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    </script>
+</body>
+</html>

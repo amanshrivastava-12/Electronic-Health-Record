@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= locals.title || 'Error' %></title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    .error-container {
+      max-width: 800px;
+      margin: 50px auto;
+      border: 1px solid #e3e3e3;
+      border-radius: 5px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      background-color: #fff;
+    }
+    .error-heading {
+      color: #d9534f;
+      margin-bottom: 20px;
+    }
+    .error-code {
+      background: #f8f8f8;
+      padding: 10px 15px;
+      border-radius: 4px;
+      margin: 20px 0;
+      font-size: 1.2rem;
+      color: #666;
+    }
+    .error-message {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #0275d8;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 20px;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background: #025aa5;
+    }
+    .btn-home {
+      background: #5cb85c;
+    }
+    .btn-home:hover {
+      background: #4cae4c;
+    }
+    header {
+      background-color: #333;
+      color: white;
+      padding: 15px 0;
+      text-align: center;
+    }
+    .header-title {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1 class="header-title">Health System</h1>
+  </header>
+
+  <div class="error-container">
+    <h1 class="error-heading"><%= locals.title || 'Error' %></h1>
+    
+    <% if (locals.status) { %>
+      <div class="error-code">Status: <%= status %></div>
+    <% } %>
+    
+    <p class="error-message"><%= locals.message || 'Something went wrong. Please try again.' %></p>
+    
+    <a href="javascript:history.back()" class="btn">Go Back</a>
+    <a href="/" class="btn btn-home">Home</a>
+  </div>
+
+  <footer>
+    <p>&copy; <%= new Date().getFullYear() %> Health Management System</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Confirmation - MediCare EHR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c5a40; --secondary: #4caf50; --accent: #8bc34a;
+            --error: #e74c3c; --success: #2ecc71; --text: #333; --light: #f9f9f9;
+            --radius: 8px; --shadow: 0 4px 6px rgba(0,0,0,0.1); --trans: all 0.3s ease;
+        }
+        * {margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;}
+        body {background: linear-gradient(135deg, #f5f7fa 0%, #e0f2e1 100%); min-height: 100vh; display: flex; flex-direction: column;}
+        
+        /* Header */
+        header {background-color: var(--primary); color: white; padding: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        .header-container {display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px;}
+        .logo {display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: bold;}
+        .logo i {color: var(--accent);}
+        .user-menu {display: flex; align-items: center; gap: 20px;}
+        .user-info {display: flex; align-items: center; gap: 8px;}
+        .user-avatar {width: 40px; height: 40px; border-radius: 50%; background-color: var(--secondary); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;}
+        .dropdown-menu {position: relative; cursor: pointer;}
+        .dropdown-content {display: none; position: absolute; right: 0; top: 100%; background-color: white; min-width: 180px; box-shadow: var(--shadow); border-radius: var(--radius); z-index: 10; overflow: hidden;}
+        .dropdown-menu:hover .dropdown-content {display: block;}
+        .dropdown-content a {color: var(--text); padding: 12px 16px; text-decoration: none; display: flex; align-items: center; gap: 10px; transition: var(--trans);}
+        .dropdown-content a:hover {background-color: #f5f5f5; color: var(--primary);}
+        .dropdown-content a i {width: 20px; text-align: center;}
+        
+        /* Main Content */
+        .main-content {flex: 1; padding: 30px 20px; max-width: 800px; margin: 0 auto; width: 100%;}
+        .page-title {margin-bottom: 25px; color: var(--primary); font-size: 28px; text-align: center;}
+        
+        /* Receipt Container */
+        .receipt-container {background-color: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 30px; margin-bottom: 30px;}
+        .receipt-header {text-align: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid #eee;}
+        .receipt-header .success-icon {font-size: 48px; color: var(--success); margin-bottom: 15px;}
+        .receipt-header h2 {color: var(--primary); font-size: 24px; margin-bottom: 10px;}
+        .receipt-header p {color: #666; font-size: 16px;}
+        
+        .receipt-id {background-color: #f8f9fa; padding: 12px; border-radius: var(--radius); margin-bottom: 25px; text-align: center;}
+        .receipt-id p {font-size: 16px; color: var(--text); margin: 0;}
+        .receipt-id .id-number {font-weight: bold; color: var(--primary); font-size: 18px;}
+        
+        .appointment-details {margin-bottom: 25px;}
+        .appointment-details h3 {color: var(--primary); font-size: 20px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee;}
+        .detail-item {display: flex; margin-bottom: 12px;}
+        .detail-label {font-weight: 600; width: 40%; color: var(--text);}
+        .detail-value {flex: 1; color: #555;}
+        
+        .doctor-info {display: flex; align-items: center; background-color: #f8f9fa; padding: 15px; border-radius: var(--radius); margin-bottom: 25px;}
+        .doctor-photo {width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin-right: 15px;}
+        .doctor-photo img {width: 100%; height: 100%; object-fit: cover;}
+        .doctor-details {flex: 1;}
+        .doctor-name {font-weight: 600; font-size: 18px; color: var(--primary); margin-bottom: 5px;}
+        .doctor-specialty {color: #666; margin-bottom: 5px;}
+        .doctor-location {color: #666; font-size: 14px;}
+        
+        .payment-info {margin-bottom: 25px;}
+        .payment-info h3 {color: var(--primary); font-size: 20px; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee;}
+        .payment-detail {display: flex; justify-content: space-between; margin-bottom: 12px;}
+        .payment-detail:last-child {margin-bottom: 0; padding-top: 10px; border-top: 1px dashed #ddd; font-weight: bold;}
+        .payment-label {color: var(--text);}
+        .payment-value {color: #555;}
+        
+        .instructions {background-color: #f8f9fa; padding: 20px; border-radius: var(--radius); margin-bottom: 25px;}
+        .instructions h3 {color: var(--primary); font-size: 18px; margin-bottom: 12px;}
+        .instructions p {color: #666; margin-bottom: 10px;}
+        .instructions ul {padding-left: 20px; margin-bottom: 10px;}
+        .instructions ul li {margin-bottom: 5px; color: #555;}
+        
+        .action-buttons {display: flex; gap: 15px; justify-content: center;}
+        .btn {background-color: var(--secondary); color: white; border: none; padding: 12px 20px; border-radius: var(--radius); font-size: 16px; font-weight: 600; cursor: pointer; transition: var(--trans); display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;}
+        .btn:hover {background-color: #3e8e41; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.1);}
+        .btn-outline {background-color: transparent; border: 1px solid var(--secondary); color: var(--secondary);}
+        .btn-outline:hover {background-color: var(--secondary); color: white;}
+        
+        /* QR Code */
+        .qr-section {text-align: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid #eee;}
+        .qr-section p {margin-bottom: 15px; color: #666;}
+        .qr-code {width: 120px; height: 120px; background-color: #f1f1f1; margin: 0 auto; display: flex; align-items: center; justify-content: center;}
+        .qr-code img {width: 100%; height: 100%;}
+        
+        /* Footer */
+        footer {background-color: var(--primary); color: white; padding: 15px 0; margin-top: auto;}
+        .footer-content {max-width: 1200px; margin: 0 auto; padding: 0 20px; text-align: center; font-size: 14px;}
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .detail-item {flex-direction: column;}
+            .detail-label {width: 100%; margin-bottom: 5px;}
+            .action-buttons {flex-direction: column;}
+            .doctor-info {flex-direction: column; text-align: center;}
+            .doctor-photo {margin-right: 0; margin-bottom: 15px;}
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>MediCare EHR</span>
+            </div>
+            <div class="user-menu">
+                <div class="dropdown-menu">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <span>JD</span>
+                        </div>
+                        <span>John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-content">
+                        <a href="/patient/dashboard"><i class="fas fa-th-large"></i> Dashboard</a>
+                        <a href="/patient/appointments"><i class="fas fa-calendar-check"></i> My Appointments</a>
+                        <a href="/patient/medical-records"><i class="fas fa-file-medical"></i> Medical Records</a>
+                        <a href="/patient/prescriptions"><i class="fas fa-prescription-bottle-alt"></i> Prescriptions</a>
+                        <a href="/patient/profile"><i class="fas fa-user-circle"></i> My Profile</a>
+                        <a href="/patient/settings"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="main-content">
+        <h1 class="page-title">Appointment Confirmation</h1>
+        
+        <div class="receipt-container">
+            <div class="receipt-header">
+                <div class="success-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Your Appointment is Confirmed!</h2>
+                <p>We have reserved your appointment slot. Please keep this receipt for your records.</p>
+            </div>
+            
+            <div class="receipt-id">
+                <p>Appointment Reference ID: <span class="id-number">MH-2025-05632</span></p>
+            </div>
+            
+            <div class="appointment-details">
+                <h3>Appointment Details</h3>
+                <div class="detail-item">
+                    <div class="detail-label">Patient Name:</div>
+                    <div class="detail-value">John Doe</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Appointment Type:</div>
+                    <div class="detail-value">General Consultation</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Medical Speciality:</div>
+                    <div class="detail-value">Family Medicine</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Date & Time:</div>
+                    <div class="detail-value">Tuesday, May 6, 2025 at 11:00 AM</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Duration:</div>
+                    <div class="detail-value">30 minutes</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Reason for Visit:</div>
+                    <div class="detail-value">Annual check-up and blood pressure monitoring</div>
+                </div>
+            </div>
+            
+            <div class="doctor-info">
+                <div class="doctor-photo">
+                    <img src="/api/placeholder/70/70" alt="Dr. Sarah Johnson">
+                </div>
+                <div class="doctor-details">
+                    <div class="doctor-name">Dr. Sarah Johnson</div>
+                    <div class="doctor-specialty">Family Medicine</div>
+                    <div class="doctor-location">MediCare Health Center - Main Campus, Building B, Floor 3</div>
+                </div>
+            </div>
+            
+            <div class="payment-info">
+                <h3>Payment Information</h3>
+                <div class="payment-detail">
+                    <div class="payment-label">Consultation Fee:</div>
+                    <div class="payment-value">$75.00</div>
+                </div>
+                <div class="payment-detail">
+                    <div class="payment-label">Insurance Coverage (Est.):</div>
+                    <div class="payment-value">-$60.00</div>
+                </div>
+                <div class="payment-detail">
+                    <div class="payment-label">Estimated Co-pay:</div>
+                    <div class="payment-value">$15.00</div>
+                </div>
+                <div class="payment-detail">
+                    <div class="payment-label">Payment Status:</div>
+                    <div class="payment-value">To be collected at appointment</div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>Important Instructions</h3>
+                <p>Please note the following information for your appointment:</p>
+                <ul>
+                    <li>Please arrive 15 minutes before your scheduled appointment time</li>
+                    <li>Bring your insurance card and a valid photo ID</li>
+                    <li>If you have any recent medical records or test results related to your visit, please bring them with you</li>
+                    <li>If you need to cancel or reschedule, please do so at least 24 hours in advance</li>
+                </ul>
+                <p>For any questions or concerns, please contact our office at (555) 123-4567.</p>
+            </div>
+            
+            <div class="qr-section">
+                <p>Scan this QR code at our self-check-in kiosk upon arrival</p>
+                <div class="qr-code">
+                    <img src="/api/placeholder/120/120" alt="Appointment QR Code">
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="/patient/dashboard" class="btn">
+                    <i class="fas fa-home"></i>
+                    Go to Dashboard
+                </a>
+                <a href="#" class="btn btn-outline" onclick="window.print(); return false;">
+                    <i class="fas fa-print"></i>
+                    Print Receipt
+                </a>
+                <a href="#" class="btn btn-outline">
+                    <i class="fas fa-calendar-alt"></i>
+                    Add to Calendar
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 MediCare EHR. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
